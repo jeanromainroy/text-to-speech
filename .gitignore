@@ -1,0 +1,6 @@
+.DS_Store
+*.wav
+tmp/pretrained_models/
+tmp/tts/
+tmp/vocoder/
+libs/speechbrain/
