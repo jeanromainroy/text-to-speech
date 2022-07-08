@@ -5,7 +5,7 @@ brew install cmake
 brew install pkgconfig
 
 # clone the speechbrain repo
-cd libs/
+cd speech/libs/
 git clone https://github.com/speechbrain/speechbrain/
 cd speechbrain/
 

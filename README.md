@@ -2,11 +2,6 @@
 
 A broad range of useful scripts made executable through speech. Running locally for privacy. 
 
-The speech engine is based on the [SpeechBrain Toolkit](https://speechbrain.github.io/), the speech recognition model is fine-tuned on my voice. 
-
-Everything else is matching spoken instructions with target script and API integration.
-
-System runs on a high-end smartphone. 
 
 ## Domains
 
@@ -24,7 +19,25 @@ _And custom stuff..._
 
 ## Architecture
 
-...
+### Speech
+
+The speech engine is based on the [SpeechBrain Toolkit](https://speechbrain.github.io/)
+
+The speech recognition model is fine-tuned on my voice. 
+
+It runs inside a Flask server.
+
+The config file can be found [here](./speech/config.py)
+
+
+### ...
+
+
+## Installation
+
+Run the [install](./install.sh) script (it takes ~10 seconds to launch), 
+
+    ./install.sh
 
 
 ## Author

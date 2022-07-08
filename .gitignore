@@ -1,9 +1,6 @@
 .DS_Store
 *.wav
-tmp/pretrained_models/
-tmp/tts/
-tmp/vocoder/
-libs/speechbrain/
 
-tmp/finetuned_models/
-libs/EncDecFineTune.py
+speech/tmp/
+speech/libs/speechbrain/
+speech/libs/EncDecFineTune.py
