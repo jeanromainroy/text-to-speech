@@ -4,3 +4,6 @@ tmp/pretrained_models/
 tmp/tts/
 tmp/vocoder/
 libs/speechbrain/
+
+tmp/finetuned_models/
+libs/EncDecFineTune.py

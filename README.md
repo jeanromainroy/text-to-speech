@@ -2,9 +2,11 @@
 
 A broad range of useful scripts made executable through speech. Running locally for privacy. 
 
-The speech engine is based on the [SpeechBrain Toolkit](https://speechbrain.github.io/). Speech recognition model is fine-tuned on my voice. Everything else is tedious API integration. 
+The speech engine is based on the [SpeechBrain Toolkit](https://speechbrain.github.io/), the speech recognition model is fine-tuned on my voice. 
 
-System runs on a high-end smartphone
+Everything else is matching spoken instructions with target script and API integration.
+
+System runs on a high-end smartphone. 
 
 ## Domains
 

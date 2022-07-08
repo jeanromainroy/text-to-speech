@@ -18,8 +18,10 @@ from tqdm import tqdm
 # initialize the decoder
 asr_model = EncoderDecoderASR.from_hparams(
     source="speechbrain/asr-crdnn-rnnlm-librispeech", 
-    savedir="pretrained_models/asr-crdnn-rnnlm-librispeech"
+    savedir="tmp/pretrained_models/asr-crdnn-rnnlm-librispeech"
 )
+
+
 
 def save_waveform(path, waveform, rate=22050):
 
@@ -38,7 +40,7 @@ def run():
         print('INFO: Starting')
 
     # init
-    path = f"./waveforms/speechbrain_enchanced.wav"
+    path = f"./tmp/test.wav"
 
     # run
     text = asr_model.transcribe_file(path)

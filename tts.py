@@ -1,5 +1,5 @@
 # import user config
-from config import text as user_provided_text, LOG, MAX_NBR_OF_CHARS_PER_WAVEFORM
+from config import LOG, MAX_NBR_OF_CHARS_PER_WAVEFORM, OS_TYPE
 
 # import pytorch
 import torch
@@ -19,6 +19,9 @@ from speechbrain.pretrained import HIFIGAN
 
 # import tqdm
 from tqdm import tqdm
+
+# import audio player
+import os
 
 # import libs
 from libs.chunker import chunk_text
@@ -42,6 +45,15 @@ enhance_model = WaveformEnhancement.from_hparams(
     source="speechbrain/mtl-mimic-voicebank",
     savedir="tmp/pretrained_models/mtl-mimic-voicebank",
 )
+
+
+def play_audio(path):
+    if OS_TYPE == 'mac':
+        os.system("afplay " + path)
+    elif OS_TYPE == 'linux': 
+        os.system("mpg123 " + path)
+    else:
+        raise Exception('Invalid os')
 
 
 def text_to_waveform(text):
@@ -119,6 +131,5 @@ def run(text):
     if LOG:
         print(f'File saved at {path}')
 
-
-# run
-run(user_provided_text)
+    # play audio
+    play_audio(path)
