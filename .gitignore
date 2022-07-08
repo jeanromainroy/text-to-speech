@@ -4,3 +4,7 @@
 speech/tmp/
 speech/libs/speechbrain/
 speech/libs/EncDecFineTune.py
+
+node_modules/
+package-lock.json
+build/

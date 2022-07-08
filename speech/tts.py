@@ -87,7 +87,7 @@ def save_waveform(path, waveform, rate=22050):
 def run(text):
     
     # log
-    if LOG: print('INFO: Starting')
+    if LOG: print(f'\n\nINFO: Starting\n{text}')
 
     # init
     waveform_files = []
