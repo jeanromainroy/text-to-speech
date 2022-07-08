@@ -25,7 +25,7 @@ import os
 
 # import libs
 from libs.chunker import chunk_text
-from libs.audio import equalize
+from libs.audio import equalize, resample
 from libs.strings import generate_uuid
 
 
@@ -70,10 +70,10 @@ def text_to_waveform(text):
     return waveform
 
 
-def enhance_waveform(path):
+def enhance_waveform(waveform):
 
     # enhance
-    waveform_enhanced = enhance_model.enhance_file(path).detach().cpu().squeeze()
+    waveform_enhanced = enhance_model.enhance_batch(waveform.unsqueeze(0)).detach().cpu().squeeze()
 
     # traditionnal audio processing to soften the track
     waveform_enhanced = equalize(waveform_enhanced)
@@ -116,12 +116,11 @@ def run(text):
         # concatenate
         waveform = concatenate_waveforms(waveform, waveform_chunk)
 
-    # save
-    path = f"./tmp/{generate_uuid()}.wav"
-    save_waveform(path, waveform, rate=22050)
+    # resample
+    waveform_resampled = resample(waveform, 22050, 16000)
 
     # enhance
-    waveform_enhanced = enhance_waveform(path)
+    waveform_enhanced = enhance_waveform(waveform_resampled)
 
     # save
     path = f"./tmp/{generate_uuid()}.wav"
@@ -133,3 +132,6 @@ def run(text):
 
     # play audio
     play_audio(path)
+
+    # delete
+    os.remove(path)

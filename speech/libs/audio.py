@@ -7,9 +7,17 @@ import numpy as np
 from scipy import signal
 from scipy.signal import butter, lfilter
 import torch
+import torchaudio
+import torchaudio.transforms as T
 
 # config
 SAMPLING_RATE = 16000
+
+
+def resample(waveform, src_sampling=22050, dest_sampling=16000):
+    resampler = T.Resample(src_sampling, dest_sampling, dtype=waveform.dtype)
+    resampled_waveform = resampler(waveform)
+    return resampled_waveform
 
 
 def low_pass(xn, cutoff_freq=4000, order=3):
