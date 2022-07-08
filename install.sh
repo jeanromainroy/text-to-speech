@@ -12,3 +12,6 @@ cd speechbrain/
 # install dependencies
 pip3 install -r requirements.txt
 pip3 install -e .
+
+# install additionnal dependencies
+pip3 install Flask

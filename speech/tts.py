@@ -1,9 +1,11 @@
-# import user config
-from config import LOG, MAX_NBR_OF_CHARS_PER_WAVEFORM, OS_TYPE
+"""
+    Text-to-Speech module
 
-# import pytorch
-import torch
-import torchaudio
+    info: tts does ~4 syllables / second
+"""
+
+# import user config
+from config import LOG, MAX_NBR_OF_CHARS_PER_WAVEFORM
 
 # import speechbrain
 import speechbrain as sb
@@ -20,13 +22,14 @@ from speechbrain.pretrained import HIFIGAN
 # import tqdm
 from tqdm import tqdm
 
-# import audio player
-import os
+# import multi-thread
+import threading
 
 # import libs
 from libs.chunker import chunk_text
 from libs.audio import equalize, resample
 from libs.strings import generate_uuid
+from libs.player import Player
 
 
 # intialize TTS (tacotron2) and Vocoder (HiFIGAN)
@@ -45,15 +48,6 @@ enhance_model = WaveformEnhancement.from_hparams(
     source="speechbrain/mtl-mimic-voicebank",
     savedir="tmp/pretrained_models/mtl-mimic-voicebank",
 )
-
-
-def play_audio(path):
-    if OS_TYPE == 'mac':
-        os.system("afplay " + path)
-    elif OS_TYPE == 'linux': 
-        os.system("mpg123 " + path)
-    else:
-        raise Exception('Invalid os')
 
 
 def text_to_waveform(text):
@@ -81,57 +75,61 @@ def enhance_waveform(waveform):
     return waveform_enhanced
 
 
-def concatenate_waveforms(wav_1, wav_2):
-    return torch.cat((wav_1, wav_2), 0)
-
-
 def save_waveform(path, waveform, rate=22050):
 
     # save
     write_audio(path, waveform, rate)
 
     # log
-    if LOG:
-        print(f'INFO: Waveform saved at {path}')
+    if LOG: print(f'INFO: Waveform saved at {path}')
 
 
 def run(text):
     
     # log
-    if LOG:
-        print('INFO: Starting')
+    if LOG: print('INFO: Starting')
 
     # init
-    waveform = torch.empty((0))
+    waveform_files = []
 
     # chunk text
     chunks = chunk_text(text, MAX_NBR_OF_CHARS_PER_WAVEFORM, LOG=LOG)
 
+    # create uid for each chunk
+    chunks_uid = [generate_uuid() for chunk in chunks]
+
+    # init player
+    player = Player(chunks_uid)
+
+    # Create a Thread with a function without any arguments
+    th = threading.Thread(target=player.start)
+
+    # Start the thread
+    th.start()
+    
     # convert text to waveform
-    for text in tqdm(chunks, disable=(not LOG)):
+    for i, text in enumerate(chunks):
+
+        # create file path
+        path = f"./tmp/{chunks_uid[i]}.wav"
 
         # convert chunk to waveform
-        waveform_chunk = text_to_waveform(text)
+        waveform = text_to_waveform(text)
 
-        # concatenate
-        waveform = concatenate_waveforms(waveform, waveform_chunk)
+        # resample
+        waveform_resampled = resample(waveform, 22050, 16000)
 
-    # resample
-    waveform_resampled = resample(waveform, 22050, 16000)
+        # enhance
+        waveform_enhanced = enhance_waveform(waveform_resampled)
 
-    # enhance
-    waveform_enhanced = enhance_waveform(waveform_resampled)
+        # save
+        save_waveform(path, waveform_enhanced, rate=16000)
 
-    # save
-    path = f"./tmp/{generate_uuid()}.wav"
-    save_waveform(path, waveform_enhanced, rate=16000)
+        # append
+        waveform_files.append(path)
 
-    # log
-    if LOG:
-        print(f'File saved at {path}')
+        # log
+        if LOG: print(f'INFO: File saved at {path}')
 
-    # play audio
-    play_audio(path)
-
-    # delete
-    os.remove(path)
+    # Wait for thread to finish
+    th.join()

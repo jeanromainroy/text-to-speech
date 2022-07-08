@@ -20,6 +20,14 @@ def resample(waveform, src_sampling=22050, dest_sampling=16000):
     return resampled_waveform
 
 
+def concatenate_waveforms(wav_1, wav_2):
+    if wav_1 is None:
+        wav_1 = torch.empty((0))
+    if wav_2 is None:
+        wav_2 = torch.empty((0))
+    return torch.cat((wav_1, wav_2), 0)
+
+
 def low_pass(xn, cutoff_freq=4000, order=3):
 
     # init order 3 lowpass butterworth filter
