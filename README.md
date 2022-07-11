@@ -1,20 +1,6 @@
-# Personal Digital Assistant
+# Text-to-Speech
 
-A broad range of useful scripts made executable through speech. Running locally for privacy. 
-
-
-## Domains
-
-Productivity:  Emails, Slack, Whatsapp, Clients' instances
-
-News:  Twitter, Traditional Media (e.g. Le Monde, NYT, FT), Stock Exchange
-
-Knowledge:  Wikipedia, Google
-
-Entertainment:  Audiobook, Music, Youtube, Conversational Agent (e.g. GPT)
-
-
-_And custom stuff..._
+A natural sounding text-to-speech accessible through a chrome extension. Running locally for privacy. 
 
 
 ## Architecture
@@ -28,9 +14,6 @@ The speech recognition model is fine-tuned on my voice.
 It runs inside a Flask server.
 
 The config file can be found [here](./speech/config.py)
-
-
-### ...
 
 
 ## Installation
@@ -47,12 +30,3 @@ Then install the chrome extension,
 2. Click on "Load unpacked"
 
 3. Select the chrome-extension/public/ folder of this repository
-
-
-## Author
-
-Jean-Romain Roy
-
-- [Portfolio](https://jeanromainroy.com/)
-
-- [GitHub](https://github.com/jeanromainroy)
